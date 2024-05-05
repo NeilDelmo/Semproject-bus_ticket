@@ -5,6 +5,10 @@
 const int ROWS=10;
 const int COL=4;
 
+struct Bus {
+    char seat[ROWS][COL];
+};
+
 class Node {
 public:
     std::string place_name;
@@ -26,54 +30,47 @@ void display_route(Node*n) {
     }
 }
 
-void display_seat(char seat[ROWS][COL]) {
-    std::cout<<"Bus seat: \n";
-    std::cout<<"V=Vacant/X=Occupied\n";
-    for(int i=0; i<ROWS; ++i) {
-        for (int j=0; j<COL; ++j) {
-            if(j%2==0) {
-                std::cout<<"[";
+void display_seat(Bus& bus) {
+    int occupied = 0;
+    std::cout << "Bus seat: \n";
+    std::cout << "V=Vacant/X=Occupied\n";
+    for (int i = 0; i < ROWS; ++i) {
+        for (int j = 0; j < COL; ++j) {
+            if (j % 2 == 0) {
+                std::cout << "[";
             }
-            std::cout<<seat[i][j]<<"]";
-            if(j%2==1) {
-                std::cout<<" ";
+            std::cout << bus.seat[i][j] << "]";
+            if (j % 2 == 1) {
+                std::cout << " ";
+            }
+            if (bus.seat[i][j] == 'X') {
+                occupied++;
             }
         }
-        std::cout<<"\n";
+        std::cout << "\n";
     }
-}
-
-bool select_seat(char seat[ROWS][COL],int row,int col) {
-    bool isFull = true;
-
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COL; j++) {
-            if (seat[i][j] != 'X') {
-                isFull = false;
-
-                if (row > 0 && row <= ROWS && col > 0 && col <= COL) {
-                    if (seat[row - 1][col - 1] == 'X') {
-                        std::cout << "Seat already taken! \n";
-                    } else {
-                        seat[row - 1][col - 1] = 'X';
-                        std::cout << "Seat " <<"r"<< row << "c" << col << " has been Occupied.\n";
-                        return true;
-                    }
-                } else {
-                    std::cout << "Invalid seat";
-                }
+    if (occupied == ROWS * COL) {
+        std::cout << "Bus is full! Capacity reset.\n";
+        for (int i = 0; i < ROWS; ++i) {
+            for (int j = 0; j < COL; ++j) {
+                bus.seat[i][j] = 'V';
             }
         }
     }
-
-    if (isFull) {
-        std::cout << "Bus is full! No vacant seats available.\n";
-    }
-
-    return false;
 }
 
-void delete_seat(char seat[ROWS][COL]) {
+bool select_seat(Bus& bus, int row, int col) {
+    if (bus.seat[row][col] == 'V') {
+        bus.seat[row][col] = 'X';
+        std::cout << "Seat successfully reserved!\n";
+        return true;
+    } else {
+        std::cout << "Seat already occupied. Please select another seat.\n";
+        return false;
+    }
+}
+
+void delete_seat(Bus&bus) {
     int row, col;
     std::cout << "Enter row and column for the seat \n";
     std::cout << "Row: ";
@@ -82,8 +79,8 @@ void delete_seat(char seat[ROWS][COL]) {
     std::cin >> col;
 
     if(row >0 && row <=ROWS && col >0 && col <= COL) {
-        if(seat[row-1][col-1] == 'X') {
-            seat[row-1][col-1] = 'V';
+        if(bus.seat[row-1][col-1] == 'X') {
+            bus.seat[row-1][col-1] = 'V';
             std::cout<<"Seat "<<"r"<<row<<"c"<<col<<" has been Deleted.\n";
 
         } else {
@@ -106,18 +103,14 @@ int main() {
     std::string from;
     std::string stop;
     int route;
-    float bus_money = 0.00;
-    char seat[ROWS][COL]= {{'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'},
-        {'V','V','V','V'}
-    };
+    Bus buses[5];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < ROWS; j++) {
+            for (int k = 0; k < COL; k++) {
+                buses[i].seat[j][k] = 'V';
+            }
+        }
+    }
 
     do {
         company();
@@ -198,7 +191,7 @@ int main() {
             std::cout<<"Invalid route number!"<<std::endl;
         }
         std::string action;
-        std::cout<< "what to do(add/delete/balance/display): ";
+        std::cout<< "what to do(add/delete/display): ";
         std::cin>>action;
 
         std::cout << std::fixed << std::setprecision(2);
@@ -220,14 +213,15 @@ int main() {
 
             float price=bus_stops[stop]-bus_stops[from];
 
-            display_seat(seat);
+            display_seat(buses[route-1]);
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
             std::cin >> row;
             std::cout << "Column: ";
             std::cin >> col;
 
-            select_seat(seat,row,col);
+            select_seat(buses[route-1],row-1,col-1);
+
 
             std::cout<<"passenger type: \n";
             std::cout<<"[1] Regular \t [3] Student\n";
@@ -247,42 +241,31 @@ int main() {
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Raulo\n";
                 std::cout<<"Conductor: Raul\n";
-                std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
+                std::cout<<"Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price * 0.90;
-        } else if (action == "delete") {
-            bus_money -= price * 0.90;
-        }
-                    break;
-                case 1:
-                    company();
-                    std::cout<<"Route: "<<route<<"\n";
-                    std::cout<<"From: "<<from<<"\n";
-                    std::cout<<"Stop: "<<stop<<"\n";
-                    std::cout<<"Driver: Raulo\n";
-                    std::cout<<"Conductor: Raul\n";
-                    std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
-                    std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
-                    std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
-                    std::cout<<"Thank you for riding with us! \n";
-                   if (action == "add") {
-            bus_money += price;
-        } else if (action == "delete") {
-            bus_money -= price;
-        }
-                else{
-                bus_money+=price;
-                }
-                    break;
-                default:
-                    std::cout<<"Error type! \n";
-                    break;
-                }
+                std::cout<<"------------------------------\n";
+                break;
+            case 1:
+                company();
+                std::cout<<"Route: "<<route<<"\n";
+                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"Stop: "<<stop<<"\n";
+                std::cout<<"Driver: Raulo\n";
+                std::cout<<"Conductor: Raul\n";
+                std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
+                std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
+                std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
+                std::cout<<"Thank you for riding with us! \n";
+                std::cout<<"------------------------------\n";
+                break;
+            default:
+                std::cout<<"Error type! \n";
+                break;
             }
-            
+        }
+
         if(route==2 && action=="add") {
             std::map<std::string, float>bus_stops;
             bus_stops["Station"]=0.00;
@@ -298,15 +281,14 @@ int main() {
             std::cin>>stop;
 
             float price=bus_stops[stop]-bus_stops[from];
-
+            display_seat(buses[route-1]);
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
             std::cin >> row;
             std::cout << "Column: ";
             std::cin >> col;
 
-            display_seat(seat);
-            select_seat(seat,row,col);
+            select_seat(buses[route-1],row-1,col-1);
 
             std::cout<<"passenger type: \n";
             std::cout<<"[1] Regular \t [3] Student\n";
@@ -330,11 +312,7 @@ int main() {
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price * 0.90;
-        } else if (action == "delete") {
-            bus_money -= price * 0.90;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             case 1:
                 company();
@@ -347,11 +325,7 @@ int main() {
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-               if (action == "add") {
-            bus_money += price;
-        } else if (action == "delete") {
-            bus_money -= price;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             default:
                 std::cout<<"Error type! \n";
@@ -372,6 +346,7 @@ int main() {
             std::cin>>stop;
 
             float price=bus_stops[stop]-bus_stops[from];
+            display_seat(buses[route-1]);
 
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -379,8 +354,7 @@ int main() {
             std::cout << "Column: ";
             std::cin >> col;
 
-            display_seat(seat);
-            select_seat(seat,row,col);
+            select_seat(buses[route-1],row-1,col-1);
 
             std::cout<<"passenger type: \n";
             std::cout<<"[1] Regular \t [3] Student\n";
@@ -404,11 +378,7 @@ int main() {
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price * 0.90;
-        } else if (action == "delete") {
-            bus_money -= price * 0.90;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             case 1:
                 company();
@@ -421,11 +391,7 @@ int main() {
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price;
-        } else if (action == "delete") {
-            bus_money -= price;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             default:
                 std::cout<<"Error type! \n";
@@ -446,6 +412,7 @@ int main() {
             std::cin>>stop;
 
             float price=bus_stops[stop]-bus_stops[from];
+            display_seat(buses[route-1]);
 
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -453,8 +420,7 @@ int main() {
             std::cout << "Column: ";
             std::cin >> col;
 
-            display_seat(seat);
-            select_seat(seat,row, col);
+            select_seat(buses[route-1],row-1,col-1);
 
             std::cout<<"passenger type: \n";
             std::cout<<"[1] Regular \t [3] Student\n";
@@ -478,11 +444,7 @@ int main() {
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price * 0.90;
-        } else if (action == "delete") {
-            bus_money -= price * 0.90;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             case 1:
                 company();
@@ -495,11 +457,7 @@ int main() {
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price;
-        } else if (action == "delete") {
-            bus_money -= price;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             default:
                 std::cout<<"Error type! \n";
@@ -521,14 +479,16 @@ int main() {
 
             float price=bus_stops[stop]-bus_stops[from];
 
+            display_seat(buses[route-1]);
+
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
             std::cin >> row;
             std::cout << "Column: ";
             std::cin >> col;
 
-            display_seat(seat);
-            select_seat(seat,row,col);
+            select_seat(buses[route-1],row-1,col-1);
+            display_seat(buses[route-1]);
 
             std::cout<<"passenger type: \n";
             std::cout<<"[1] Regular \t [3] Student\n";
@@ -552,11 +512,7 @@ int main() {
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price * 0.90;
-        } else if (action == "delete") {
-            bus_money -= price * 0.90;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             case 1:
                 company();
@@ -569,32 +525,22 @@ int main() {
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
-                if (action == "add") {
-            bus_money += price;
-        } else if (action == "delete") {
-            bus_money -= price;
-        }
+                std::cout<<"------------------------------\n";
                 break;
             default:
                 std::cout<<"Error type! \n";
             }
         }
-        
-        if(action=="delete"){
-        display_seat(seat);
-        delete_seat(seat);
-        display_seat(seat);
-        
+
+        if(action=="delete") {
+            display_seat(buses[route-1]);
+            delete_seat(buses[route-1]);
+            display_seat(buses[route-1]);
+
         }
 
         if(action=="display") {
-            display_seat(seat);
-
-        }
-
-        if(action=="balance") {
-
-            std::cout<<"Balance: "<<bus_money<<" php\n";
+            display_seat(buses[route-1]);
 
         }
 
