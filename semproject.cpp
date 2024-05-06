@@ -515,8 +515,8 @@ int main() {
                 std::cout<<"Route: "<<route<<"\n";
                 std::cout<<"From: "<<from<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
-                std::cout<<"Driver: Raulo\n";
-                std::cout<<"Conductor: Raul\n";
+                std::cout<<"Driver: Puge\n";
+                std::cout<<"Conductor: Kai\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
@@ -528,8 +528,8 @@ int main() {
                 std::cout<<"Route: "<<route<<"\n";
                 std::cout<<"From: "<<from<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
-                std::cout<<"Driver: Raulo\n";
-                std::cout<<"Conductor: Raul\n";
+                std::cout<<"Driver: Puge\n";
+                std::cout<<"Conductor: Kai\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
