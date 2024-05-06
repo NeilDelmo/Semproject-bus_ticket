@@ -50,7 +50,7 @@ void display_seat(Bus& bus) {
         std::cout << "\n";
     }
     if (occupied == ROWS * COL) {
-        std::cout << "Bus is full! Capacity reset.\n";
+        std::cout << "Bus is full! Go to another bus\n";
         for (int i = 0; i < ROWS; ++i) {
             for (int j = 0; j < COL; ++j) {
                 bus.seat[i][j] = 'V';
@@ -206,11 +206,12 @@ int main() {
             bus_stops["Kuwatro"]=70.00;
             bus_stops["Singko"]=90.00;
 
-            std::cout<<"Select where from: ";
-            std::cin>>from;
-            std::cout<<"Select where to stop: Barangay ";
-            std::cin>>stop;
-
+            do {
+                std::cout<<"Select where from: ";
+                std::cin>>from;
+                std::cout<<"Select where to stop: Barangay ";
+                std::cin>>stop;
+            } while(bus_stops[from]>bus_stops[stop]);
             float price=bus_stops[stop]-bus_stops[from];
 
             display_seat(buses[route-1]);
@@ -275,10 +276,12 @@ int main() {
             bus_stops["Nagmahalan"]=70.00;
             bus_stops["Nagingsila"]=90.00;
 
-            std::cout<<"Select where from: ";
-            std::cin>>from;
-            std::cout<<"Select where to stop: Barangay ";
-            std::cin>>stop;
+            do {
+                std::cout<<"Select where from: ";
+                std::cin>>from;
+                std::cout<<"Select where to stop: Barangay ";
+                std::cin>>stop;
+            } while(bus_stops[from]>bus_stops[stop]);
 
             float price=bus_stops[stop]-bus_stops[from];
             display_seat(buses[route-1]);
@@ -340,10 +343,12 @@ int main() {
             bus_stops["Iniwan"]=70.00;
             bus_stops["Nasaktan"]=90.00;
 
-            std::cout<<"Select where from: ";
-            std::cin>>from;
-            std::cout<<"Select where to stop: Barangay ";
-            std::cin>>stop;
+            do {
+                std::cout<<"Select where from: ";
+                std::cin>>from;
+                std::cout<<"Select where to stop: Barangay ";
+                std::cin>>stop;
+            } while(bus_stops[from]>bus_stops[stop]);
 
             float price=bus_stops[stop]-bus_stops[from];
             display_seat(buses[route-1]);
@@ -406,10 +411,12 @@ int main() {
             bus_stops["Umupo"]=70.00;
             bus_stops["Nagcode"]=90.00;
 
-            std::cout<<"Select where from: ";
-            std::cin>>from;
-            std::cout<<"Select where to stop: Barangay ";
-            std::cin>>stop;
+            do {
+                std::cout<<"Select where from: ";
+                std::cin>>from;
+                std::cout<<"Select where to stop: Barangay ";
+                std::cin>>stop;
+            } while(bus_stops[from]>bus_stops[stop]);
 
             float price=bus_stops[stop]-bus_stops[from];
             display_seat(buses[route-1]);
@@ -472,10 +479,12 @@ int main() {
             bus_stops["Takot"]=70.00;
             bus_stops["Gutom"]=90.00;
 
-            std::cout<<"Select where from: ";
-            std::cin>>from;
-            std::cout<<"Select where to stop: Barangay ";
-            std::cin>>stop;
+            do {
+                std::cout<<"Select where from: ";
+                std::cin>>from;
+                std::cout<<"Select where to stop: Barangay ";
+                std::cin>>stop;
+            } while(bus_stops[from]>bus_stops[stop]);
 
             float price=bus_stops[stop]-bus_stops[from];
 
