@@ -12,25 +12,18 @@ struct Bus {
 class Node {
 public:
     std::string place_name;
-    int value;
+    std::string time;
     Node*next;
 
-    Node(std::string name, int val, Node* next) : place_name(name), value(val), next(next) {}
+    Node(std::string name, std::string time, Node* next) : place_name(name), time(time), next(next) {}
     ~Node() {
         delete next;
     }
 
 };
 
-void display_route(Node*n) {
-    while(n!=NULL) {
-        std::cout<<n->place_name<<" - ";
-        std::cout<<n->value<<" km "<<'\n';
-        n=n->next;
-    }
-}
-
 void display_seat(Bus& bus) {
+    int bus_number=1;
     int occupied = 0;
     std::cout << "Bus seat: \n";
     std::cout << "V=Vacant/X=Occupied\n";
@@ -50,10 +43,13 @@ void display_seat(Bus& bus) {
         std::cout << "\n";
     }
     if (occupied == ROWS * COL) {
+        ++bus_number;
         std::cout << "Bus is full! Go to another bus\n";
+        std::cout<<" Bus number:"<<bus_number<<"\n";
         for (int i = 0; i < ROWS; ++i) {
             for (int j = 0; j < COL; ++j) {
                 bus.seat[i][j] = 'V';
+
             }
         }
     }
@@ -97,6 +93,150 @@ void company() {
     std::cout<<"==============================\n\n";
 }
 
+void menu(Node* head) {
+    Node* current = head;
+    int i = 1;
+    std::cout << "Choose your destination:\n";
+    std::cout << "--------------------------------\n";
+    std::cout << "Place\t\tEstimated Time of Arrival(Military time)\n";
+    std::cout << "--------------------------------\n";
+    while (current!= nullptr) {
+        std::cout << i << ". " << current->place_name << " \t       " << current->time << "\n";
+        current = current->next;
+        i++;
+    }
+    std::cout << "--------------------------------\n";
+}
+
+
+std::map<std::string, int> stopCounter;
+
+void counter(std::string stop, int route) {
+    if(stop == "Uno") {
+        stopCounter["Uno"]++;
+    }
+    if(stop == "Dos") {
+        stopCounter["Dos"]++;
+    }
+    if(stop == "Tres") {
+        stopCounter["Tres"]++;
+    }
+    if(stop == "Kuwatro") {
+        stopCounter["Kuwatro"]++;
+    }
+    if(stop == "Singko") {
+        stopCounter["Singko"]++;
+    }
+
+    if(stop == "Tinitigan") {
+        stopCounter["Tinitigan"]++;
+    }
+    if(stop == "Nakachat") {
+        stopCounter["Nakachat"]++;
+    }
+    if(stop == "Lambingan") {
+        stopCounter["Lambingan"]++;
+    }
+    if(stop == "Nagmahalan") {
+        stopCounter["Nagmahalan"]++;
+    }
+    if(stop == "Nagingsila") {
+        stopCounter["Nagingsila"]++;
+    }
+
+    if(stop == "Umibig") {
+        stopCounter["Umibig"]++;
+    }
+    if(stop == "Umasa") {
+        stopCounter["Umasa"]++;
+    }
+    if(stop == "Pinaglalaruan") {
+        stopCounter["Pinaglalaruan"]++;
+    }
+    if(stop == "Iniwan") {
+        stopCounter["Iniwan"]++;
+    }
+    if(stop == "Nasaktan") {
+        stopCounter["Nasaktan"]++;
+    }
+
+    if(stop == "Bumangon") {
+        stopCounter["Bumangon"]++;
+    }
+    if(stop == "Tumayo") {
+        stopCounter["Tumayo"]++;
+    }
+    if(stop == "Naglakad") {
+        stopCounter["Naglakad"]++;
+    }
+    if(stop == "Umupo") {
+        stopCounter["Umupo"]++;
+    }
+    if(stop == "Nagcode") {
+        stopCounter["Nagcode"]++;
+    }
+
+    if(stop == "Masaya") {
+        stopCounter["Masaya"]++;
+    }
+    if(stop == "Malungkot") {
+        stopCounter["Malungkot"]++;
+    }
+    if(stop == "Tamad") {
+        stopCounter["Tamad"]++;
+    }
+    if(stop == "Takot") {
+        stopCounter["Takot"]++;
+    }
+    if(stop == "Gutom") {
+        stopCounter["Gutom"]++;
+    }
+
+    switch(route) {
+    case 1:
+        std::cout<<"Route 1 bus stops\n";
+        std::cout<<"Uno: " << stopCounter["Uno"] << "\n";
+        std::cout<<"Dos: " << stopCounter["Dos"] << "\n";
+        std::cout<<"Tres: " << stopCounter["Tres"] << "\n";
+        std::cout<<"Kuwatro: " << stopCounter["Kuwatro"] << "\n";
+        std::cout<<"Singko: " << stopCounter["Singko"] << "\n";
+        break;
+    case 2:
+        std::cout<<"Route 2 bus stops\n";
+        std::cout<<"Tinitigan: " << stopCounter["Tinitigan"] << "\n";
+        std::cout<<"Nakachat: " << stopCounter["Nakachat"] << "\n";
+        std::cout<<"Lambingan: " << stopCounter["Lambingan"] << "\n";
+        std::cout<<"Nagmahalan: " << stopCounter["Nagmahalan"] << "\n";
+        std::cout<<"Nagingsila: " << stopCounter["Nagingsila"] << "\n";
+        break;
+    case 3:
+        std::cout<<"Route 3 bus stops\n";
+        std::cout<<"Umibig: " << stopCounter["Umibig"] << "\n";
+        std::cout<<"Umasa: " << stopCounter["Umasa"] << "\n";
+        std::cout<<"Pinaglalaruan: " << stopCounter["Pinaglalaruan"] << "\n";
+        std::cout<<"Iniwan: " << stopCounter["Iniwan"] << "\n";
+        std::cout<<"Nasaktan: " << stopCounter["Nasaktan"] << "\n";
+        break;
+    case 4:
+        std::cout<<"Route 4 bus stops\n";
+        std::cout<<"Bumangon: " << stopCounter["Bumangon"] << "\n";
+        std::cout<<"Tumayo: " << stopCounter["Tumayo"] << "\n";
+        std::cout<<"Naglakad: " << stopCounter["Naglakad"] << "\n";
+        std::cout<<"Umupo: " << stopCounter["Umupo"] << "\n";
+        std::cout<<"Nagcode: " << stopCounter["Nagcode"] << "\n";
+        break;
+    case 5:
+        std::cout<<"Route 5 bus stops\n";
+        std::cout<<"Masaya: " << stopCounter["Masaya"] << "\n";
+        std::cout<<"Malungkot: " << stopCounter["Malungkot"] << "\n";
+        std::cout<<"Tamad: " << stopCounter["Tamad"] << "\n";
+        std::cout<<"Takot: " << stopCounter["Takot"] << "\n";
+        std::cout<<"Gutom: " << stopCounter["Gutom"] << "\n";
+        break;
+
+    }
+}
+
 int main() {
     int row;
     int col;
@@ -123,97 +263,111 @@ int main() {
 
         switch (route) {
         case 1:
-            *current = new Node("Station", 0, nullptr);
+            *current = new Node("Station", "10:00", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Uno", 3, nullptr);
+            *current = new Node("Barangay Uno", "10:10", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Dos", 10, nullptr);
+            *current = new Node("Barangay Dos", "10:20", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Tres", 20, nullptr);
+            *current = new Node("Barangay Tres", "10:30", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Kuwatro", 30, nullptr);
+            *current = new Node("Barangay Kuwatro", "10:40", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Singko", 40, nullptr);
+            *current = new Node("Barangay Singko", "10:50", nullptr);
             break;
         case 2:
-            *current = new Node("Station", 0, nullptr);
+            *current = new Node("Station", "10:10", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Tinitigan", 3, nullptr);
+            *current = new Node("Barangay Tinitigan", "12:30", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Nakachat", 10, nullptr);
+            *current = new Node("Barangay Nakachat", "12:40", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Lambingan", 20, nullptr);
+            *current = new Node("Barangay Lambingan", "12:50", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Nagmahalan", 30, nullptr);
+            *current = new Node("Barangay Nagmahalan", "13:00", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Nagingsila", 40, nullptr);
+            *current = new Node("Barangay Nagingsila", "13:10", nullptr);
             break;
         case 3:
-            *current = new Node("Station", 0, nullptr);
+            *current = new Node("Station", "14:00", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Umibig", 3, nullptr);
+            *current = new Node("Barangay Umibig", "14:10", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Umasa", 10, nullptr);
+            *current = new Node("Barangay Umasa", "14:20", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Pinaglalaruan", 20, nullptr);
+            *current = new Node("Barangay Pinaglalaruan", "14:30", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Iniwan", 30, nullptr);
+            *current = new Node("Barangay Iniwan", "14:40", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Nasaktan", 40, nullptr);
+            *current = new Node("Barangay Nasaktan", "14:50", nullptr);
             break;
         case 4:
-            *current = new Node("Station", 0, nullptr);
+            *current = new Node("Station", "8:20", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Bumangon", 3, nullptr);
+            *current = new Node("Barangay Bumangon","8:30", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Tumayo", 10, nullptr);
+            *current = new Node("Barangay Tumayo", "8:40", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Naglakad", 20, nullptr);
+            *current = new Node("Barangay Naglakad", "8:50", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Umupo", 30, nullptr);
+            *current = new Node("Barangay Umupo", "9:00", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Nagcode", 40, nullptr);
+            *current = new Node("Barangay Nagcode", "9:10", nullptr);
             break;
         case 5:
-            *current = new Node("Station", 0, nullptr);
+            *current = new Node("Station", "6:00", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Masaya", 3, nullptr);
+            *current = new Node("Barangay Masaya", "6:10", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Malungkot", 10, nullptr);
+            *current = new Node("Barangay Malungkot", "6:20", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Tamad", 20, nullptr);
+            *current = new Node("Barangay Tamad", "6:30", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Takot", 30, nullptr);
+            *current = new Node("Barangay Takot", "6:40", nullptr);
             current = &((*current)->next);
-            *current = new Node("Barangay Gutom", 40, nullptr);
+            *current = new Node("Barangay Gutom", "6:50", nullptr);
             break;
         default:
             std::cout<<"Invalid route number!"<<std::endl;
         }
+        menu(head);
         std::string action;
         std::cout<< "what to do(add/delete/display): ";
         std::cin>>action;
 
-        std::cout << std::fixed << std::setprecision(2);
-        display_route(head);
-        if(route==1 && action=="add") {
+        std::map<std::string,int>stopCounter;
 
-            std::map<std::string,float>bus_stops;
-            bus_stops["Station"]=0.00;
-            bus_stops["Uno"]=12.00;
-            bus_stops["Dos"]=24.00;
-            bus_stops["Tres"]=49.00;
-            bus_stops["Kuwatro"]=70.00;
-            bus_stops["Singko"]=90.00;
+        if(action=="display") {
+
+            display_seat(buses[route-1]);
+            std::cout << "Bus Stops:" << std::endl;
+            counter(stop, route);
+
+
+        }
+
+        std::cout << std::fixed << std::setprecision(2);
+
+        if(route==1 && action=="add") {
+            std::map<std::string, int>bus_stops;
+            bus_stops["Station"]=0;
+            bus_stops["Uno"]=12;
+            bus_stops["Dos"]=24;
+            bus_stops["Tres"]=49;
+            bus_stops["Kuwatro"]=70;
+            bus_stops["Singko"]=90;
 
             do {
-                std::cout<<"Select where from: ";
-                std::cin>>from;
+                std::cout<<"From: Station\n";
                 std::cout<<"Select where to stop: Barangay ";
                 std::cin>>stop;
-            } while(bus_stops[from]>bus_stops[stop]);
-            float price=bus_stops[stop]-bus_stops[from];
-
+            } while(bus_stops["Station"]>bus_stops[stop]);
+            if (stopCounter.find(stop)!= stopCounter.end()) {
+                stopCounter[stop]++;
+            } else {
+                stopCounter[stop] = 1;
+            }
+            float price=bus_stops[stop]-bus_stops["Station"];
             display_seat(buses[route-1]);
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -238,12 +392,13 @@ int main() {
             case 4:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Raulo\n";
                 std::cout<<"Conductor: Raul\n";
                 std::cout<<"Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
+                std::cout<<"Estimated time: 10:50 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -256,6 +411,7 @@ int main() {
                 std::cout<<"Driver: Raulo\n";
                 std::cout<<"Conductor: Raul\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
+                std::cout<<"Estimated time: 10:50 \n";
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
@@ -277,13 +433,16 @@ int main() {
             bus_stops["Nagingsila"]=90.00;
 
             do {
-                std::cout<<"Select where from: ";
-                std::cin>>from;
+                std::cout<<"From: Station\n";
                 std::cout<<"Select where to stop: Barangay ";
                 std::cin>>stop;
-            } while(bus_stops[from]>bus_stops[stop]);
-
-            float price=bus_stops[stop]-bus_stops[from];
+            } while(bus_stops["Station"]>bus_stops[stop]);
+            if (stopCounter.find(stop)!= stopCounter.end()) {
+                stopCounter[stop]++;
+            } else {
+                stopCounter[stop] = 1;
+            }
+            float price=bus_stops[stop]-bus_stops["Station"];
             display_seat(buses[route-1]);
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -307,12 +466,13 @@ int main() {
             case 4:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Cigeh\n";
                 std::cout<<"Conductor: Yosi\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
+                std::cout<<"Estimated time: 13:10 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -320,12 +480,13 @@ int main() {
             case 1:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Cigeh\n";
                 std::cout<<"Conductor: Yosi\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
+                std::cout<<"Estimated time: 13:10 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -344,13 +505,17 @@ int main() {
             bus_stops["Nasaktan"]=90.00;
 
             do {
-                std::cout<<"Select where from: ";
-                std::cin>>from;
+                std::cout<<"From: Station\n";
                 std::cout<<"Select where to stop: Barangay ";
                 std::cin>>stop;
-            } while(bus_stops[from]>bus_stops[stop]);
+            } while(bus_stops["Station"]>bus_stops[stop]);
+            if (stopCounter.find(stop)!= stopCounter.end()) {
+                stopCounter[stop]++;
+            } else {
+                stopCounter[stop] = 1;
+            }
 
-            float price=bus_stops[stop]-bus_stops[from];
+            float price=bus_stops[stop]-bus_stops["Station"];
             display_seat(buses[route-1]);
 
             std::cout << "Enter row and column for the seat \n";
@@ -375,12 +540,13 @@ int main() {
             case 4:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Jaja\n";
                 std::cout<<"Conductor: Jeje\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
+                std::cout<<"Estimated time: 14:50 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -388,12 +554,13 @@ int main() {
             case 1:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Jaja\n";
                 std::cout<<"Conductor: Jeje\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
+                std::cout<<"Estimated time: 14:50 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -412,13 +579,16 @@ int main() {
             bus_stops["Nagcode"]=90.00;
 
             do {
-                std::cout<<"Select where from: ";
-                std::cin>>from;
+                std::cout<<"From: Station\n";
                 std::cout<<"Select where to stop: Barangay ";
                 std::cin>>stop;
-            } while(bus_stops[from]>bus_stops[stop]);
-
-            float price=bus_stops[stop]-bus_stops[from];
+            } while(bus_stops["Station"]>bus_stops[stop]);
+            if (stopCounter.find(stop)!= stopCounter.end()) {
+                stopCounter[stop]++;
+            } else {
+                stopCounter[stop] = 1;
+            }
+            float price=bus_stops[stop]-bus_stops["Station"];
             display_seat(buses[route-1]);
 
             std::cout << "Enter row and column for the seat \n";
@@ -443,12 +613,13 @@ int main() {
             case 4:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Ger\n";
                 std::cout<<"Conductor: Gar\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
+                std::cout<<"Estimated time: 9:10 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -456,12 +627,13 @@ int main() {
             case 1:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Ger\n";
                 std::cout<<"Conductor: Gar\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
+                std::cout<<"Estimated time: 9:10 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -480,13 +652,17 @@ int main() {
             bus_stops["Gutom"]=90.00;
 
             do {
-                std::cout<<"Select where from: ";
-                std::cin>>from;
+                std::cout<<"From: Station\n";
                 std::cout<<"Select where to stop: Barangay ";
                 std::cin>>stop;
-            } while(bus_stops[from]>bus_stops[stop]);
+            } while(bus_stops["Station"]>bus_stops[stop]);
+            if (stopCounter.find(stop)!= stopCounter.end()) {
+                stopCounter[stop]++;
+            } else {
+                stopCounter[stop] = 1;
+            }
 
-            float price=bus_stops[stop]-bus_stops[from];
+            float price=bus_stops[stop]-bus_stops["Station"];
 
             display_seat(buses[route-1]);
 
@@ -513,12 +689,13 @@ int main() {
             case 4:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
-                std::cout<<"Driver: Puge\n";
-                std::cout<<"Conductor: Kai\n";
+                std::cout<<"Driver: Raulo\n";
+                std::cout<<"Conductor: Raul\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The price of the ticket is "<<price*.90<<" pesos\n";
+                std::cout<<"Estimated time: 6:50 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -526,12 +703,13 @@ int main() {
             case 1:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
-                std::cout<<"Driver: Puge\n";
-                std::cout<<"Conductor: Kai\n";
+                std::cout<<"Driver: Raulo\n";
+                std::cout<<"Conductor: Raul\n";
                 std::cout << "Seat: " <<"r"<< row << "c" << col<<"\n";
                 std::cout<<"The regular price of the ticket is "<<price<<" pesos\n";
+                std::cout<<"Estimated time: 6:50 \n";
                 std::cout<<"Ticket bought at "<<__DATE__<<" "<<__TIME__<<" \n"<<std::endl;
                 std::cout<<"Thank you for riding with us! \n";
                 std::cout<<"------------------------------\n";
@@ -544,11 +722,6 @@ int main() {
         if(action=="delete") {
             display_seat(buses[route-1]);
             delete_seat(buses[route-1]);
-            display_seat(buses[route-1]);
-
-        }
-
-        if(action=="display") {
             display_seat(buses[route-1]);
 
         }
