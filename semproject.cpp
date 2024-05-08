@@ -2,8 +2,8 @@
 #include <map>
 #include <iomanip>
 
-const int ROWS=10;
-const int COL=4;
+const int ROWS=2;
+const int COL=2;
 
 struct Bus {
     char seat[ROWS][COL];
@@ -22,10 +22,16 @@ public:
 
 };
 
-void display_seat(Bus& bus) {
-    int bus_number=1;
+void reset_counter(std::map<std::string, int>& stopCounter) {
+    stopCounter.clear();
+    std::cout << "Next Bus\n";
+}
+
+int current_bus_number = 0;
+
+void display_seat(Bus& bus, std::map<std::string, int>& stopCounter) {
     int occupied = 0;
-    std::cout << "Bus seat: \n";
+    std::cout << "Bus " << current_bus_number+1 << " seat: \n";
     std::cout << "V=Vacant/X=Occupied\n";
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COL; ++j) {
@@ -43,15 +49,20 @@ void display_seat(Bus& bus) {
         std::cout << "\n";
     }
     if (occupied == ROWS * COL) {
-        ++bus_number;
-        std::cout << "Bus is full! Go to another bus\n";
-        std::cout<<" Bus number:"<<bus_number<<"\n";
+        ++current_bus_number; 
+        if (current_bus_number >= 5) {
+            std::cout << "All buses are full. Cannot accommodate more passengers.\n";
+            return;
+        }
+        std::cout << "Bus " << current_bus_number << " is full! Go to another bus\n";
         for (int i = 0; i < ROWS; ++i) {
             for (int j = 0; j < COL; ++j) {
                 bus.seat[i][j] = 'V';
-
+                
             }
         }
+          reset_counter(stopCounter);
+            std::cout << "Bus " << current_bus_number+1 << " seat: \n";
     }
 }
 
@@ -78,7 +89,6 @@ void delete_seat(Bus&bus) {
         if(bus.seat[row-1][col-1] == 'X') {
             bus.seat[row-1][col-1] = 'V';
             std::cout<<"Seat "<<"r"<<row<<"c"<<col<<" has been Deleted.\n";
-
         } else {
             std::cout << "Seat already vacant!\n";
         }
@@ -111,91 +121,11 @@ void menu(Node* head) {
 
 std::map<std::string, int> stopCounter;
 
-void counter(std::string stop, int route) {
-    if(stop == "Uno") {
-        stopCounter["Uno"]++;
-    }
-    if(stop == "Dos") {
-        stopCounter["Dos"]++;
-    }
-    if(stop == "Tres") {
-        stopCounter["Tres"]++;
-    }
-    if(stop == "Kuwatro") {
-        stopCounter["Kuwatro"]++;
-    }
-    if(stop == "Singko") {
-        stopCounter["Singko"]++;
-    }
-
-    if(stop == "Tinitigan") {
-        stopCounter["Tinitigan"]++;
-    }
-    if(stop == "Nakachat") {
-        stopCounter["Nakachat"]++;
-    }
-    if(stop == "Lambingan") {
-        stopCounter["Lambingan"]++;
-    }
-    if(stop == "Nagmahalan") {
-        stopCounter["Nagmahalan"]++;
-    }
-    if(stop == "Nagingsila") {
-        stopCounter["Nagingsila"]++;
-    }
-
-    if(stop == "Umibig") {
-        stopCounter["Umibig"]++;
-    }
-    if(stop == "Umasa") {
-        stopCounter["Umasa"]++;
-    }
-    if(stop == "Pinaglalaruan") {
-        stopCounter["Pinaglalaruan"]++;
-    }
-    if(stop == "Iniwan") {
-        stopCounter["Iniwan"]++;
-    }
-    if(stop == "Nasaktan") {
-        stopCounter["Nasaktan"]++;
-    }
-
-    if(stop == "Bumangon") {
-        stopCounter["Bumangon"]++;
-    }
-    if(stop == "Tumayo") {
-        stopCounter["Tumayo"]++;
-    }
-    if(stop == "Naglakad") {
-        stopCounter["Naglakad"]++;
-    }
-    if(stop == "Umupo") {
-        stopCounter["Umupo"]++;
-    }
-    if(stop == "Nagcode") {
-        stopCounter["Nagcode"]++;
-    }
-
-    if(stop == "Masaya") {
-        stopCounter["Masaya"]++;
-    }
-    if(stop == "Malungkot") {
-        stopCounter["Malungkot"]++;
-    }
-    if(stop == "Tamad") {
-        stopCounter["Tamad"]++;
-    }
-    if(stop == "Takot") {
-        stopCounter["Takot"]++;
-    }
-    if(stop == "Gutom") {
-        stopCounter["Gutom"]++;
-    }
-
+void counter(std::string stop, int route, std::map<std::string,int>&stopCounter){
     switch(route) {
     case 1:
         std::cout<<"Route 1 bus stops\n";
-        std::cout<<"Uno: " << stopCounter["Uno"] << "\n";
+        std::cout<<"Uno: " << stopCounter["Uno"]<< "\n";
         std::cout<<"Dos: " << stopCounter["Dos"] << "\n";
         std::cout<<"Tres: " << stopCounter["Tres"] << "\n";
         std::cout<<"Kuwatro: " << stopCounter["Kuwatro"] << "\n";
@@ -251,6 +181,9 @@ int main() {
             }
         }
     }
+    
+    std::map<std::string,int>stopCounter;
+    
 
     do {
         company();
@@ -335,14 +268,11 @@ int main() {
         std::cout<< "what to do(add/delete/display): ";
         std::cin>>action;
 
-        std::map<std::string,int>stopCounter;
-
         if(action=="display") {
 
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
             std::cout << "Bus Stops:" << std::endl;
-            counter(stop, route);
-
+            counter(stop, route,stopCounter);
 
         }
 
@@ -368,7 +298,7 @@ int main() {
                 stopCounter[stop] = 1;
             }
             float price=bus_stops[stop]-bus_stops["Station"];
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
             std::cin >> row;
@@ -406,7 +336,7 @@ int main() {
             case 1:
                 company();
                 std::cout<<"Route: "<<route<<"\n";
-                std::cout<<"From: "<<from<<"\n";
+                std::cout<<"From: Station"<<"\n";
                 std::cout<<"Stop: "<<stop<<"\n";
                 std::cout<<"Driver: Raulo\n";
                 std::cout<<"Conductor: Raul\n";
@@ -443,7 +373,7 @@ int main() {
                 stopCounter[stop] = 1;
             }
             float price=bus_stops[stop]-bus_stops["Station"];
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
             std::cin >> row;
@@ -516,7 +446,7 @@ int main() {
             }
 
             float price=bus_stops[stop]-bus_stops["Station"];
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
 
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -589,7 +519,7 @@ int main() {
                 stopCounter[stop] = 1;
             }
             float price=bus_stops[stop]-bus_stops["Station"];
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
 
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -664,7 +594,7 @@ int main() {
 
             float price=bus_stops[stop]-bus_stops["Station"];
 
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
 
             std::cout << "Enter row and column for the seat \n";
             std::cout << "Row: ";
@@ -673,7 +603,7 @@ int main() {
             std::cin >> col;
 
             select_seat(buses[route-1],row-1,col-1);
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
 
             std::cout<<"passenger type: \n";
             std::cout<<"[1] Regular \t [3] Student\n";
@@ -720,9 +650,9 @@ int main() {
         }
 
         if(action=="delete") {
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
             delete_seat(buses[route-1]);
-            display_seat(buses[route-1]);
+            display_seat(buses[route-1],stopCounter);
 
         }
 
